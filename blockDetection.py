@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Program takes in image from robot-mounted camera and determines position of specific color block for pick and place operations.
+
 import cv2
 import numpy as np
 
