@@ -6,7 +6,6 @@ import time
 import rospy
 import rospkg
 
-# messages for student to use
 from ur3_driver.msg import command
 from ur3_driver.msg import position
 from ur3_driver.msg import gripper_input
@@ -19,8 +18,6 @@ from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 from find_block_pos import *
 from kinematic_functions import *
-
-########## Predefined functions below, no changes needed ##########
 
 # UR3 home: position for UR3 not blocking the camera
 home = [np.radians(255), np.radians(-45), np.radians(45), np.radians(-90), np.radians(-90), np.radians(90)]
@@ -163,26 +160,12 @@ class ImageConverter:
         except CvBridgeError as e:
             print(e)
 
-########## Predefined functions above, no changes needed ##########
-
-
 def MoveBlock(pub_cmd, loop_rate, start_xy, target_xy, vel, accel):
 
-    # ToDo: this function moves one block from the starting (x, y) coord
-    #       to destination (x, y) coord
-    # 
-    # Hint: - use 'inverse_kinematics()', 'move_arm()', 'gripper()' functions 
-    #       - UR3 should move upward first after gripping the block in order to have
-    #       a clear space to move around
-    #
-    # Note: - 'inverse_kinematics()' requires (x, y, z, yaw_angle), (x, y) is
-    #       given by inputs, yaw is set as 0 in this lab, so proper 'z' values should
-    #       be defined.
-    #       - height of base plate is 0.01 meters, and height of the block is 0.0318 meters
+    # Function moves one block from the starting (x, y) coord to destination (x, y) coord
+    # Note: height of base plate is 0.01 meters, and height of the block is 0.0318 meters
 
     yaw_gripper = 0
-
-    ##### Your Code Starts Here #####
 	
     z_lower = 0.0318
     z_upper = 0.0636
@@ -202,9 +185,6 @@ def MoveBlock(pub_cmd, loop_rate, start_xy, target_xy, vel, accel):
     move_arm(pub_cmd, loop_rate, orientation_final_lower, vel, accel)
     gripper(pub_cmd, loop_rate, suction_off)
     move_arm(pub_cmd, loop_rate, orientation_final_upper, vel, accel)
-
-	
-	##### Your Code Ends Here #####
 
     print("Move one block.")
     
@@ -237,18 +217,12 @@ def main():
     # Destination positions - red, yellow, green
     dest_block_xy = np.array([[0.3, -0.1], [0.2, -0.1], [0.1, -0.1]])
 
-    # The following lines provide an image named 'current_img' from
-    # the camera simulated in Gazebo
-
+    # Provide an image named 'current_img' from camera simulated in Gazebo
     ic = ImageConverter(SPIN_RATE)
     time.sleep(2)
     current_img = ic.raw_image
 
-    ##### Your Code Starts Here #####
-    
-    # ToDo: Use defined functions to move the red, yellow and green blocks to 
-    #       destination positions 'dest_block_xy' using 'current_img'
-
+    # Move blocks to correct position
     red = FindColorBlockWorldCoord(current_img, "RED")
     yellow = FindColorBlockWorldCoord(current_img, "YELLOW")
     green = FindColorBlockWorldCoord(current_img, "GREEN")
@@ -256,9 +230,6 @@ def main():
     MoveBlock(pub_command, loop_rate, red, dest_block_xy[0], vel, accel)
     MoveBlock(pub_command, loop_rate, yellow, dest_block_xy[1], vel, accel)
     MoveBlock(pub_command, loop_rate, green, dest_block_xy[2], vel, accel)
-
-	
-	##### Your Code Ends Here #####
 
     print("\n")
     print("******************************")
@@ -282,6 +253,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    # When Ctrl+C is executed, it catches the exception
+
     except rospy.ROSInterruptException:
         pass
