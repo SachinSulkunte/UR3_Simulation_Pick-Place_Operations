@@ -18,12 +18,10 @@ def GetReferenceBlockPositions():
     return ref_block_xy_pos
 
 def GetBlockPositions():
-    # ToDo:     Generate 3 random (x, y) positions for spawning blocks
-    #           Each x or y is a random number between 0.1 and 0.35
-    #           Distance between each 2 of 3 points should be greater than 0.06 meters
-    #           
-    # Hint:     Use any random number generator in Python (e.g., 'np.random.rand()', etc.)
-    #
+    # Generate 3 random (x, y) positions for spawning blocks
+    # Each x or y is a random number between 0.1 and 0.35
+    # Distance between each 2 of 3 points should be greater than 0.06 meters
+  
     # Output:   'block_xy_pos': positions for three blocks as a 3x2 array
     #           1st row: red block (x, y)
     #           2nd row: yellow block (x, y)
@@ -32,7 +30,6 @@ def GetBlockPositions():
     # Fixed initial positions
     block_xy_pos = np.array([[0.2, 0.05], [0.3, 0.05], [0.4, 0.05]])
 
-    ##### Your Code Starts Here #####
     arr = []
     num = .25 * np.random.random_sample() + .1
     num2 = .25 * np.random.random_sample() + .1
@@ -48,7 +45,6 @@ def GetBlockPositions():
 	block_xy_pos[row][0] = i
         block_xy_pos[row][1] = j
 	row += 1
-	##### Your Code Ends Here #####
 
     return block_xy_pos
 
