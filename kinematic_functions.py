@@ -7,27 +7,20 @@ def Get_MS():
 	M = np.eye(4)
 	S = np.zeros((6,6))
 
-	##### Your Code Starts Here #####
-	# Fill in scripts from lab3 here
 	M = np.eye(4) 
 	M = [[0, -1, 0, .39], [0,0,-1,.432], [1,0,0,.2155],[0,0,0,1]]
 	S = np.zeros((6,6))
 	S = [[0,0,1,-.150,-.150,0],[0,1,0,-.162,0,-.150],[0,1,0,-.162,0,.094],[0,1,0,-.162,0,.307], [1,0,0,0,.162,-.281], [0,1,0,-.162,0,.390]]
 	
-	
-	##### Your Code Ends Here #####
-
 	return M, S
 
 
 def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
-	# Initialize the return_value 
+
 	return_value = [None, None, None, None, None, None]
 
 	print("Foward kinematics calculated:\n")
 
-	##### Your Code Starts Here #####
-	# Fill in scripts from lab3 here
 	theta = np.array([theta1,theta2,theta3,theta4,theta5,theta6])
 	T = np.eye(4)
 
@@ -53,8 +46,6 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	T = np.matmul(exp_s2, T)
 	T = np.matmul(exp_s1, T)
 
-
-	##### Your Code Ends Here #####
 	print(str(T) + "\n")
 
 	return_value[0] = theta1 + np.pi
@@ -74,8 +65,6 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	return_value = np.array([0, 0, 0, 0, 0, 0])
 
-	##### Your Code Starts Here #####
-	# Fill in scripts from lab4 here
 	L = np.array([0, 152, 120, 244, 93, 213, 83, 83, 82, 53.5, 59])
 
 	x = xWgrip*1000 + 150
@@ -83,27 +72,26 @@ def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	z = zWgrip*1000 - 10 
 	theta_yaw = (yaw_WgripDegree*np.pi)/180
 
-	# Step 1: find gripper position relative to the base of UR3,
-	# and set theta_5 equal to -pi/2
+	# Find gripper position relative to the base of UR3, and set theta_5 equal to -pi/2
 	theta_5 = (-np.pi)/2
 
-	# Step 2: find x_cen, y_cen, z_cen
+	# Find x_cen, y_cen, z_cen
 	x_cen = x-L[9]*np.cos(theta_yaw)
 	y_cen = y-L[9]*np.sin(theta_yaw)
 	z_cen = z
 
-	# Step 3: find theta_1
+	# Find theta_1
 	theta_1 = np.arctan2(y_cen, x_cen) - np.arcsin((27+L[6])/ np.sqrt(y_cen**2 + x_cen**2))
 
-	# Step 4: find theta_6 
+	# Find theta_6 
 	theta_6 = theta_1 + (np.pi)/2 -theta_yaw
 
-	# Step 5: find x3_end, y3_end, z3_end
+	# Find x3_end, y3_end, z3_end
 	x_3end = x_cen - L[7]*np.cos(theta_1) + (L[6]+27)*np.sin(theta_1)
 	y_3end = y_cen - L[7]*np.sin(theta_1) - (L[6]+27)*np.cos(theta_1)
 	z_3end = z + L[8] + L[10]
 
-	# Step 6: find theta_2, theta_3, theta_4
+	# Find theta_2, theta_3, theta_4
 	x2 = np.sqrt(x_3end**2 + y_3end**2)
 	y2 = z_3end - L[1]
 	D = (x2**2 + y2**2 - L[3]**2 - L[5]**2)/((2*L[3])*L[5])
@@ -112,8 +100,6 @@ def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	
 	theta_4 = -theta_2 - theta_3
 
-	##### Your Code Ends Here #####
-
 	# print theta values (in degree) calculated from inverse kinematics
 	
 	print("Joint angles: ")
@@ -121,7 +107,6 @@ def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 			str(theta_3*180/np.pi) + " " + str(theta_4*180/np.pi) + " " + \
 			str(theta_5*180/np.pi) + " " + str(theta_6*180/np.pi))
 
-	# obtain return_value from forward kinematics function
 	return_value = lab_fk(theta_1, theta_2, theta_3, theta_4, theta_5, theta_6)
 
 	return return_value
